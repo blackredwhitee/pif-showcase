@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Витрина паевых инвестиционных фондов</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="container header__inner">
+    <div class="logo">ПИФ <span>Витрина</span></div>
+    <nav class="nav">
+      <a href="#picker">Подбор фонда</a>
+      <a href="#catalog">Каталог</a>
+      <a href="#compare">Сравнение</a>
+      <a href="#learn">Гид по ПИФ</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero__inner">
+    <h1>Витрина паевых инвестиционных фондов</h1>
+    <p class="hero__subtitle">Сравните фонды по стратегии, комиссиям, доходности и условиям выхода</p>
+    <div class="hero__actions">
+      <a href="#picker" class="btn btn--primary">Подобрать фонд</a>
+      <a href="#catalog" class="btn btn--secondary">Смотреть все фонды</a>
+    </div>
+    <p class="hero__updated">Данные актуальны на <span id="data-date"></span> · источник: Банк России</p>
+  </div>
+</section>
+
+<!-- Виджет подбора фонда -->
+<section id="picker" class="picker container">
+  <div class="picker__card">
+    <h2>Подберите фонд под себя</h2>
+    <p class="picker__lead">Ответьте на несколько простых вопросов — мы покажем 3–5 фондов, которые могут вам подойти</p>
+
+    <form id="quiz-form" class="quiz">
+      <div class="quiz__step" data-step="1">
+        <h3>1. На какой срок вы готовы инвестировать?</h3>
+        <div class="quiz__options">
+          <label><input type="radio" name="horizon" value="short"> до 1 года</label>
+          <label><input type="radio" name="horizon" value="mid"> 1–3 года</label>
+          <label><input type="radio" name="horizon" value="long"> больше 3 лет</label>
+        </div>
+      </div>
+
+      <div class="quiz__step" data-step="2">
+        <h3>2. Какой риск вам комфортен?</h3>
+        <div class="quiz__options">
+          <label><input type="radio" name="risk" value="low"> низкий</label>
+          <label><input type="radio" name="risk" value="mid"> средний</label>
+          <label><input type="radio" name="risk" value="high"> высокий</label>
+        </div>
+      </div>
+
+      <div class="quiz__step" data-step="3">
+        <h3>3. Что вам важнее?</h3>
+        <div class="quiz__options">
+          <label><input type="radio" name="priority" value="stability"> стабильность</label>
+          <label><input type="radio" name="priority" value="balance"> баланс доходности и риска</label>
+          <label><input type="radio" name="priority" value="growth"> потенциально высокая доходность</label>
+        </div>
+      </div>
+
+      <div class="quiz__step" data-step="4">
+        <h3>4. Вам важны регулярные выплаты?</h3>
+        <div class="quiz__options">
+          <label><input type="radio" name="income" value="yes"> да</label>
+          <label><input type="radio" name="income" value="no"> нет</label>
+          <label><input type="radio" name="income" value="any"> не важно</label>
+        </div>
+      </div>
+
+      <div class="quiz__step" data-step="5">
+        <h3>5. Какой подход вам ближе?</h3>
+        <div class="quiz__options">
+          <label><input type="radio" name="approach" value="passive"> пассивная стратегия / следование индексу</label>
+          <label><input type="radio" name="approach" value="active"> активное управление</label>
+          <label><input type="radio" name="approach" value="any"> не знаю</label>
+        </div>
+      </div>
+
+      <div class="quiz__step" data-step="6">
+        <h3>6. Насколько для вас важны низкие комиссии?</h3>
+        <div class="quiz__options">
+          <label><input type="radio" name="fees" value="critical"> очень важны</label>
+          <label><input type="radio" name="fees" value="moderate"> важны, но не решают всё</label>
+          <label><input type="radio" name="fees" value="flexible"> готов смотреть на фонды с более высокими комиссиями</label>
+        </div>
+      </div>
+
+      <div class="quiz__step" data-step="7">
+        <h3>7. Планируете ли вы быстро выходить из фонда?</h3>
+        <div class="quiz__options">
+          <label><input type="radio" name="exit" value="soon"> да, возможен выход в течение года</label>
+          <label><input type="radio" name="exit" value="hold"> нет, готов держать долго</label>
+          <label><input type="radio" name="exit" value="unknown"> пока не знаю</label>
+        </div>
+      </div>
+
+      <div class="quiz__actions">
+        <button type="submit" class="btn btn--primary">Подобрать фонды</button>
+        <button type="reset" class="btn btn--ghost" id="quiz-reset">Сбросить</button>
+      </div>
+    </form>
+
+    <div id="quiz-result" class="quiz-result" hidden>
+      <h3>Подходящие варианты</h3>
+      <p class="quiz-result__hint" id="quiz-result-hint"></p>
+      <div id="quiz-result-cards" class="cards-grid"></div>
+      <p class="disclaimer">Результат подбора носит информационный характер и не является индивидуальной инвестиционной рекомендацией. Перед покупкой паёв необходимо изучить правила доверительного управления и информацию на сайте управляющей компании.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Ключевые метрики -->
+<section class="stats container">
+  <div class="stats__grid" id="stats-grid"></div>
+</section>
+
+<!-- Каталог фондов -->
+<section id="catalog" class="catalog container">
+  <h2>Каталог фондов</h2>
+
+  <div class="filters">
+    <input type="text" id="f-search" class="filters__search" placeholder="Поиск по названию, УК или ISIN" autocomplete="off">
+
+    <div class="filters__row">
+      <div class="filter-group">
+        <label>Тип фонда</label>
+        <select id="f-type"><option value="">Все</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Категория</label>
+        <select id="f-category"><option value="">Все</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Стратегия</label>
+        <select id="f-strategy"><option value="">Все</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Статус</label>
+        <select id="f-status"><option value="">Все</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Выплаты</label>
+        <select id="f-income">
+          <option value="">Все</option>
+          <option value="yes">Есть выплаты</option>
+          <option value="no">Без выплат</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filters__row">
+      <div class="filter-group filter-group--range">
+        <label>Доходность за 12 мес, %: <span id="f-yield-val">любая</span></label>
+        <div class="range-pair">
+          <input type="range" id="f-yield-min" min="-50" max="100" value="-50" step="1">
+          <input type="range" id="f-yield-max" min="-50" max="100" value="100" step="1">
+        </div>
+      </div>
+      <div class="filter-group filter-group--range">
+        <label>Макс. расходы, %: <span id="f-exp-val">любые</span></label>
+        <div class="range-pair">
+          <input type="range" id="f-exp-min" min="0" max="10" value="0" step="0.1">
+          <input type="range" id="f-exp-max" min="0" max="10" value="10" step="0.1">
+        </div>
+      </div>
+    </div>
+
+    <div class="filters__row filters__row--actions">
+      <button id="f-reset" class="btn btn--ghost btn--small">Сбросить фильтры</button>
+      <span class="filters__count" id="f-count"></span>
+    </div>
+  </div>
+
+  <div id="catalog-cards" class="cards-grid"></div>
+  <div id="catalog-empty" class="empty-state" hidden>Фонды не найдены. Попробуйте изменить фильтры.</div>
+  <div class="catalog__more">
+    <button id="catalog-more" class="btn btn--secondary" hidden>Показать ещё</button>
+  </div>
+</section>
+
+<!-- Сравнение фондов -->
+<section id="compare" class="compare container">
+  <h2>Сравнение фондов</h2>
+  <p class="section-lead">Выберите от 2 до 4 фондов кнопкой «Сравнить» на карточках в каталоге или в результатах подбора.</p>
+  <div id="compare-empty" class="empty-state">Пока ничего не выбрано.</div>
+  <div id="compare-table-wrap" class="compare-table-wrap" hidden>
+    <table class="compare-table" id="compare-table"></table>
+  </div>
+  <button id="compare-clear" class="btn btn--ghost btn--small" hidden>Очистить сравнение</button>
+</section>
+
+<!-- Объясняющий блок -->
+<section id="learn" class="learn container">
+  <h2>Гид по ПИФ простыми словами</h2>
+  <div class="learn__grid">
+    <div class="learn__item">
+      <h3>Что такое ПИФ</h3>
+      <p>Паевой инвестиционный фонд — это «общий котёл», в который инвесторы вкладывают деньги, а управляющая компания (УК) покупает на них ценные бумаги или другое имущество. Каждый инвестор получает паи — долю в этом котле. Стоимость пая меняется в зависимости от того, как меняется стоимость активов фонда.</p>
+    </div>
+    <div class="learn__item">
+      <h3>Почему важны комиссии</h3>
+      <p>УК берёт вознаграждение за управление, а также есть расходы на депозитарий, регистратора и аудитора. Эти издержки списываются из имущества фонда независимо от того, заработал фонд или нет. Даже разница в 1–2% в год за несколько лет заметно снижает итоговый результат за счёт сложного процента.</p>
+    </div>
+    <div class="learn__item">
+      <h3>Почему нельзя выбирать только по прошлой доходности</h3>
+      <p>Доходность за прошлый период показывает, что было, а не то, что будет. Рынки цикличны: фонд-лидер прошлого года может оказаться среди отстающих в следующем. Прошлые результаты не гарантируют будущую доходность — это базовый принцип инвестирования.</p>
+    </div>
+    <div class="learn__item">
+      <h3>Активная и пассивная стратегия</h3>
+      <p><strong>Пассивная</strong> стратегия следует за индексом (например, индексом МосБиржи) — управляющий просто повторяет структуру индекса, и комиссии обычно ниже. <strong>Активная</strong> стратегия предполагает, что управляющий сам выбирает активы, пытаясь обойти индекс — это может дать как более высокий, так и более низкий результат, а комиссии обычно выше.</p>
+    </div>
+    <div class="learn__item">
+      <h3>Почему срок инвестирования важен</h3>
+      <p>На коротком горизонте рыночные колебания могут «съесть» доходность, а скидки при погашении паёв в первые месяцы или годы владения могут быть значительными. На длинном горизонте у фонда больше шансов пройти через спады рынка и реализовать стратегию полностью.</p>
+    </div>
+    <div class="learn__item">
+      <h3>Что такое надбавки и скидки</h3>
+      <p><strong>Надбавка</strong> — дополнительная плата, которую вы платите при покупке (выдаче) паёв, сверх их стоимости. <strong>Скидка</strong> — сумма, которая вычитается из стоимости паёв при их погашении (продаже), часто зависит от срока владения: чем короче срок, тем выше скидка. Это стимулирует инвесторов держать паи дольше.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Блок предупреждений -->
+<section class="warnings container">
+  <h2>Важно перед инвестированием</h2>
+  <div class="warnings__grid">
+    <div class="warning-card">⚠️ Прошлые результаты не гарантируют будущую доходность.</div>
+    <div class="warning-card">⚠️ Комиссии и расходы фонда снижают итоговый результат инвестора.</div>
+    <div class="warning-card">⚠️ Условия выхода (скидки при погашении) особенно важны при коротком сроке владения.</div>
+    <div class="warning-card">⚠️ Перед инвестированием нужно изучить правила доверительного управления и сайт управляющей компании.</div>
+  </div>
+  <p class="disclaimer">Материалы сайта носят информационный характер и не являются индивидуальной инвестиционной рекомендацией, офертой или гарантией доходности. Данные основаны на информации Банка России (раздел «Витрина данных», cbr.ru/RSCI/data_showcase/) по состоянию на <span id="data-date-2"></span> и могут содержать неточности.</p>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>Витрина ПИФ — независимый информационный проект на основе открытых данных Банка России. Не является официальным сайтом Банка России или какой-либо управляющей компании.</p>
+  </div>
+</footer>
+
+<!-- Модальное окно карточки фонда -->
+<div id="fund-modal" class="modal" hidden>
+  <div class="modal__overlay" data-close></div>
+  <div class="modal__content">
+    <button class="modal__close" data-close>&times;</button>
+    <div id="fund-modal-body"></div>
+  </div>
+</div>
+
+<script src="funds-data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
