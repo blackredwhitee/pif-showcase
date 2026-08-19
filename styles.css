@@ -586,14 +586,15 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
      при скролле последний пункт обрезался посреди слова. */
   .nav {
     width: 100%;
-    column-gap: 18px;
+    column-gap: 12px;
     row-gap: 6px;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-between;
   }
   .nav a {
     flex: 0 0 auto;
     padding: 4px 0;
+    font-size: 13px;
     white-space: nowrap;
   }
   .hero { padding: 40px 0 36px; }
@@ -622,6 +623,12 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
 @media (max-width: 420px) {
   .stats__grid { grid-template-columns: 1fr 1fr; }
   .hero h1 { font-size: 24px; }
+}
+
+/* Самые узкие экраны: ужимаем меню, чтобы оно осталось в одну строку */
+@media (max-width: 360px) {
+  .nav { column-gap: 6px; }
+  .nav a { font-size: 12px; }
 }
 
 
