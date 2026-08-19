@@ -68,7 +68,8 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
   align-items: center;
   justify-content: space-between;
   min-height: 64px;
-  padding: 16px 0;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 /* Компактный локап: знак 28 px + слово, gap 11 px */
 .logo {
@@ -491,7 +492,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
   color: var(--bf-text-on-dark);
   padding: 32px 0;
   font-size: 13px;
-  text-align: center;
+  text-align: left;
 }
 /* Основной локап в футере: пропорции гайда (знак : кегль : отступ = 88 : 38 : 22),
    собран версткой, а не <img>, — иначе SVG не видит Manrope и не тянется под тему. */
@@ -501,7 +502,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
   gap: 12px;
   margin-bottom: 20px;
 }
-.footer__logo-mark { width: 48px; height: 48px; display: block; }
+.footer__logo-mark { width: 48px; height: 48px; display: block; margin-left: -6px; }
 .footer__logo-text {
   display: flex;
   flex-direction: column;
@@ -523,7 +524,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
   letter-spacing: 0.16em;
   color: var(--bf-text-on-dark-muted);
 }
-.footer p { max-width: 720px; margin: 0 auto; }
+.footer p { max-width: 720px; margin: 0; }
 
 /* Modal */
 .modal {
@@ -580,17 +581,19 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
 
 /* Responsive: мобильные устройства */
 @media (max-width: 720px) {
-  .header__inner { height: auto; padding: 10px 0; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .header__inner { min-height: 0; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; gap: 10px; justify-content: flex-start; }
+  /* Меню переносится на вторую строку вместо горизонтальной прокрутки:
+     при скролле последний пункт обрезался посреди слова. */
   .nav {
     width: 100%;
-    gap: 0;
-    overflow-x: auto;
+    column-gap: 18px;
+    row-gap: 6px;
+    flex-wrap: wrap;
     justify-content: flex-start;
-    -webkit-overflow-scrolling: touch;
   }
   .nav a {
     flex: 0 0 auto;
-    padding: 6px 12px;
+    padding: 4px 0;
     white-space: nowrap;
   }
   .hero { padding: 40px 0 36px; }
