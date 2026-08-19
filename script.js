@@ -31,6 +31,15 @@ function fmtYield(num) {
   return { text, cls };
 }
 
+function yieldPeriods(fund) {
+  return [
+    { label: '1 мес.', value: fund.yield1m },
+    { label: '3 мес.', value: fund.yield3m },
+    { label: '6 мес.', value: fund.yield6m },
+    { label: '12 мес.', value: fund.yield12m },
+  ];
+}
+
 function hasIncome(fund) {
   return fund.incomeRight === 'предусмотрено' &&
     fund.incomePeriod && fund.incomePeriod !== 'не предусмотрено';
@@ -291,6 +300,10 @@ function renderFundCard(fund) {
       <div class="fund-card__company">${escapeHtml(fund.company)} · ${escapeHtml(fund.category)}</div>
       <div class="fund-card__row"><span>Стратегия</span><span>${escapeHtml(fund.strategy)}</span></div>
       <div class="fund-card__row"><span>Доходность за 12 мес.</span><span class="${y.cls}">${y.text}</span></div>
+      <div class="yield-periods">${yieldPeriods(fund).slice(0, 3).map(p => {
+        const v = fmtYield(p.value);
+        return `<span class="yield-periods__item"><i>${p.label}</i><b class="${v.cls}">${v.text}</b></span>`;
+      }).join('')}</div>
       <div class="fund-card__row"><span>Макс. расходы</span><span>${fmtPct(fund.maxExpensesPct)}</span></div>
       <div class="fund-card__row"><span>Выплаты дохода</span><span>${hasIncome(fund) ? escapeHtml(fund.incomePeriod) : 'нет'}</span></div>
       <div class="fund-card__row"><span>Надбавки / скидки</span><span>${fund.premiumsMaxPct ? 'до ' + fmtPct(fund.premiumsMaxPct) : 'нет'} / ${fund.discountsMaxPct ? 'до ' + fmtPct(fund.discountsMaxPct) : 'нет'}</span></div>
@@ -343,7 +356,10 @@ function openFundModal(fund) {
       <dt>Тип / категория / статус</dt><dd>${escapeHtml(fund.type)} · ${escapeHtml(fund.category)} · ${escapeHtml(fund.status)}</dd>
       <dt>Стратегия</dt><dd>${escapeHtml(fund.strategy)}${fund.benchmark && fund.benchmark !== 'не предусмотрено' ? ' — ориентир: ' + escapeHtml(fund.benchmark) : ''}</dd>
       <dt>Допустимое отклонение от индекса</dt><dd>${escapeHtml(fmt(fund.deviation))}</dd>
-      <dt>Доходность за 12 месяцев</dt><dd class="${y.cls}">${y.text}</dd>
+      <dt>Доходность пая</dt><dd><div class="yield-periods yield-periods--wide">${yieldPeriods(fund).map(p => {
+        const v = fmtYield(p.value);
+        return `<span class="yield-periods__item"><i>${p.label}</i><b class="${v.cls}">${v.text}</b></span>`;
+      }).join('')}</div></dd>
       <dt>Вознаграждение УК</dt><dd>${escapeHtml(fmt(fund.managementFee))}</dd>
       <dt>Вознаграждение за успех</dt><dd>${escapeHtml(fmt(fund.successFee))}</dd>
       <dt>Вознаграждение инфраструктуры</dt><dd>${escapeHtml(fmt(fund.infraFee))}</dd>
@@ -401,6 +417,9 @@ function renderCompare() {
 
   const rows = [
     { label: 'Фонд', render: f => escapeHtml(f.name) },
+    { label: 'Доходность за 1 мес.', render: f => { const y = fmtYield(f.yield1m); return `<span class="${y.cls}">${y.text}</span>`; } },
+    { label: 'Доходность за 3 мес.', render: f => { const y = fmtYield(f.yield3m); return `<span class="${y.cls}">${y.text}</span>`; } },
+    { label: 'Доходность за 6 мес.', render: f => { const y = fmtYield(f.yield6m); return `<span class="${y.cls}">${y.text}</span>`; } },
     { label: 'Доходность за 12 мес.', render: f => { const y = fmtYield(f.yield12m); return `<span class="${y.cls}">${y.text}</span>`; } },
     { label: 'Стратегия', render: f => escapeHtml(f.strategy) + (f.benchmark && f.benchmark !== 'не предусмотрено' ? '<br><small>' + escapeHtml(f.benchmark) + '</small>' : '') },
     { label: 'Вознаграждение УК', render: f => escapeHtml(fmt(f.managementFee)) },

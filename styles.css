@@ -335,6 +335,23 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.01em; }
 }
 .fund-card__row span:first-child { color: var(--text-muted); }
 .fund-card__row span:last-child { font-weight: 600; text-align: right; }
+.yield-periods {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  margin-top: -2px;
+}
+.yield-periods__item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.yield-periods__item i {
+  font-style: normal;
+  color: var(--text-muted);
+}
+.yield-periods__item b { font-weight: 600; }
+.yield-periods--wide { gap: 20px; font-size: 13px; margin-top: 0; }
 .yield-pos { color: var(--green); }
 .yield-neg { color: var(--red); }
 .fund-card__actions {
