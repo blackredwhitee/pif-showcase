@@ -1,7 +1,21 @@
-import openpyxl, json, re
+import openpyxl, json, re, sys
 
-wb = openpyxl.load_workbook('/Users/milena/Downloads/mutual_fund_data.xlsx')
+SRC = sys.argv[1] if len(sys.argv) > 1 else '/Users/milena/Downloads/mutual_fund_data.xlsx'
+
+wb = openpyxl.load_workbook(SRC)
 ws = wb.active
+
+def sheet_date():
+    """Extract the 'as of' date from the sheet header, e.g. 30.06.2026."""
+    for r in range(1, 5):
+        for c in range(1, 4):
+            v = ws.cell(r, c).value
+            if isinstance(v, str):
+                m = re.search(r'(\d{2}\.\d{2}\.\d{4})', v)
+                if m:
+                    return m.group(1)
+    raise SystemExit('не нашёл дату актуальности в шапке файла')
+
 
 def s(v):
     if v is None:
@@ -20,12 +34,19 @@ def first_percent(text):
         return None
     return float(m.group(1).replace(',', '.'))
 
+def pct(v):
+    """Convert a fractional yield to percent, rounded to 2 decimals."""
+    return round(v * 100, 2) if isinstance(v, (int, float)) else None
+
+
 def max_percent(text):
     """Extract the maximum numeric percent value found in a string."""
     if not text:
         return None
     nums = [float(x.replace(',', '.')) for x in re.findall(r'(\d+(?:[.,]\d+)?)\s*%', text)]
     return max(nums) if nums else None
+
+UPDATED = sheet_date()
 
 funds = []
 for row in ws.iter_rows(min_row=5, values_only=True):
@@ -35,12 +56,6 @@ for row in ws.iter_rows(min_row=5, values_only=True):
     rules_date = row[9]
     if hasattr(rules_date, 'strftime'):
         rules_date = rules_date.strftime('%d.%m.%Y')
-
-    yield12 = row[21]
-    if isinstance(yield12, (int, float)):
-        yield12_pct = round(yield12 * 100, 2)
-    else:
-        yield12_pct = None
 
     mgmt_fee_text = s(row[13])
     success_fee_text = s(row[14])
@@ -75,15 +90,18 @@ for row in ws.iter_rows(min_row=5, values_only=True):
         'premiumsMaxPct': max_percent(premiums_text),
         'discounts': discounts_text,
         'discountsMaxPct': max_percent(discounts_text),
-        'yield12m': yield12_pct,
+        'yield1m': pct(row[21]),
+        'yield3m': pct(row[22]),
+        'yield6m': pct(row[23]),
+        'yield12m': pct(row[24]),
     }
     funds.append(fund)
 
 print('total funds:', len(funds))
 
 with open('funds-data.js', 'w', encoding='utf-8') as f:
-    f.write('// Данные ПИФ, актуальность: 30.04.2026 (источник: Банк России, cbr.ru/RSCI/data_showcase/)\n')
+    f.write(f'// Данные ПИФ, актуальность: {UPDATED} (источник: Банк России, cbr.ru/RSCI/data_showcase/)\n')
     f.write('const FUNDS_DATA = ')
     json.dump(funds, f, ensure_ascii=False, indent=1)
     f.write(';\n')
-    f.write('const FUNDS_UPDATED = "30.04.2026";\n')
+    f.write(f'const FUNDS_UPDATED = "{UPDATED}";\n')
