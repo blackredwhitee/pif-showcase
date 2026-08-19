@@ -1,0 +1,57 @@
+/* bestfunds — brand tokens.
+   Drop into the codebase and map existing color usages onto these.
+   Old palette → new: любой корпоративный синий/зелёный → --bf-accent;
+   тёмно-серый текст → --bf-ink; серые рамки → --bf-border. */
+
+:root {
+  /* base */
+  --bf-ink: #0A0A0C;
+  --bf-surface: #FFFFFF;
+  --bf-surface-2: #F7F6FD;
+  --bf-surface-dark: #1E1E26;
+
+  /* accent */
+  --bf-accent: #6E5BF0;
+  --bf-accent-hover: #5B4BE0;
+  --bf-accent-active: #4B3ED6;
+  --bf-accent-on-dark: #8A7BFF;
+  --bf-accent-tint: #EEEBFE;
+
+  /* text */
+  --bf-text: #0A0A0C;
+  --bf-text-secondary: #5A6472;
+  --bf-text-muted: #6B7480;
+  --bf-text-on-accent: #FFFFFF;
+
+  /* lines */
+  --bf-border: #DFE3EA;
+  --bf-divider: #EDF0F4;
+
+  /* radii */
+  --bf-radius-xs: 6px;
+  --bf-radius-sm: 10px;
+  --bf-radius-md: 14px;
+  --bf-radius-lg: 20px;
+  --bf-radius-pill: 999px;
+
+  /* type */
+  --bf-font: 'Manrope', system-ui, -apple-system, sans-serif;
+  --bf-font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --bf-logo-weight: 800;
+  --bf-logo-tracking: -0.05em;
+
+  /* motion */
+  --bf-ease: cubic-bezier(.2, .7, .3, 1);
+  --bf-duration: 160ms;
+}
+
+[data-theme="dark"] {
+  --bf-surface: #0A0A0C;
+  --bf-surface-2: #1E1E26;
+  --bf-text: #FFFFFF;
+  --bf-text-secondary: rgba(255, 255, 255, .62);
+  --bf-text-muted: rgba(255, 255, 255, .5);
+  --bf-accent: #8A7BFF;
+  --bf-border: rgba(255, 255, 255, .14);
+  --bf-divider: rgba(255, 255, 255, .08);
+}
